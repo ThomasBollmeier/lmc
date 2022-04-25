@@ -1,6 +1,6 @@
 class Stdin(object):
 
-    def next_value(self):
+    def read_value(self):
         value = int(input("Enter a value (0-999)"))
         return value
 
