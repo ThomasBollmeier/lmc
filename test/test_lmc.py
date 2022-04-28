@@ -40,6 +40,28 @@ class TestLMC(TestCase):
         address = self.lmc.get_free_data_address()
         self.assertEqual(5, address)
 
+    def test_run_program(self):
+
+        self.lmc.set_data(50, 40)
+        self.lmc.set_data(51, 3)
+        self.lmc.set_data(52, 1)
+
+        instructions = [
+            550,
+            151,
+            252,
+            902,
+            0
+        ]
+        self.lmc.load_program(instructions)
+
+        out = TestOut()
+        self.lmc.set_output(out)
+
+        self.lmc.run()
+
+        self.assertEqual([42], out.out)
+
     def test_get_free_data_address(self):
         address = self.lmc.get_free_data_address()
         self.assertEqual(0, address)

@@ -20,6 +20,8 @@ class LMC(object):
         self._in = in_
         self._out = out
 
+        self._done = False
+
     def set_input(self, in_):
         self._in = in_
 
@@ -48,6 +50,59 @@ class LMC(object):
 
     def set_data(self, address, value):
         self._mem[address] = value
+
+    def run(self):
+        self._done = False
+        while not self._done:
+            instruction = self._fetch()
+            if instruction is None:
+                break
+            opcode, address = self._decode(instruction)
+            self._execute(opcode, address)
+
+    def _fetch(self):
+        ret = self._mem[self._pc]
+        self._pc += 1
+        return ret
+
+    @staticmethod
+    def _decode(instruction):
+        if instruction == 0:
+            return 0, 0
+        instruction_str = str(instruction)
+        opcode = int(instruction_str[0])
+        address = int(instruction_str[1:])
+        return opcode, address
+
+    def _execute(self, opcode, address):
+        if opcode == 1:
+            self.add(address)
+        elif opcode == 2:
+            self.sub(address)
+        elif opcode == 3:
+            self.store(address)
+        elif opcode == 5:
+            self.load(address)
+        elif opcode == 6:
+            self.branch(address)
+        elif opcode == 7:
+            self.branch_if_zero(address)
+        elif opcode == 8:
+            self.branch_if_positive(address)
+        elif opcode == 9:
+            if address == 1:
+                self.inp()
+            elif address == 2:
+                self.out()
+            else:
+                raise Exception("Illegal opcode")
+        elif opcode == 0:
+            if address == 0:
+                self.halt()
+            else:
+                raise Exception("Illegal opcode")
+        else:
+            raise Exception("Illegal opcode")
 
     def add(self, address):
         self._acc += self._mem[address]
@@ -81,5 +136,8 @@ class LMC(object):
 
     def out(self):
         self._out.write(self._acc)
+
+    def halt(self):
+        self._done = True
 
 
