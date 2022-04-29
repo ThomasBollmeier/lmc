@@ -1,0 +1,20 @@
+inp // Get first argument A
+brz endw // Nothing to do if A == 0
+sta a
+inp // Get second argument B
+sta b
+while   lda b // Calculate RES = A * B by adding A B times to RES
+brz endw
+sub one
+sta b
+lda res
+add a
+sta res
+bra while
+endw   lda res
+out
+hlt
+a   dat
+b   dat
+res  dat 0
+one  dat 1
