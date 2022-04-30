@@ -95,32 +95,29 @@ class TestLMC(TestCase):
         self.assertEqual(42, self.lmc._mem[51])
 
     def test_branch(self):
-        self.lmc.set_data(50, 5)
-        self.lmc.branch(50)
+        self.lmc.branch(5)
         self.assertEqual(5, self.lmc._pc)
 
     def test_branch_if_zero(self):
         self.lmc._acc = 4
         jump_addr = 5
-        self.lmc.set_data(50, jump_addr)
-        self.lmc.branch_if_zero(50)
+        self.lmc.branch_if_zero(jump_addr)
         self.assertEqual(0, self.lmc._pc)
 
         self.lmc._acc = 0
-        self.lmc.branch_if_zero(50)
+        self.lmc.branch_if_zero(jump_addr)
         self.assertEqual(jump_addr, self.lmc._pc)
 
     def test_branch_if_positive(self):
         self.lmc._acc = -4
         self.lmc._negative = True
         jump_addr = 5
-        self.lmc.set_data(50, jump_addr)
-        self.lmc.branch_if_positive(50)
+        self.lmc.branch_if_positive(jump_addr)
         self.assertEqual(0, self.lmc._pc)
 
         self.lmc._acc = 4
         self.lmc._negative = False
-        self.lmc.branch_if_positive(50)
+        self.lmc.branch_if_positive(jump_addr)
         self.assertEqual(jump_addr, self.lmc._pc)
 
     def test_inp(self):

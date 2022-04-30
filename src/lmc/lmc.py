@@ -120,15 +120,15 @@ class LMC(object):
         self._negative = self._acc < 0
 
     def branch(self, address):
-        self._pc = self._mem[address]
+        self._pc = address
 
     def branch_if_zero(self, address):
         if self._acc == 0 and not self._negative:
-            self._pc = self._mem[address]
+            self._pc = address
 
     def branch_if_positive(self, address):
         if self._acc >= 0 and not self._negative:
-            self._pc = self._mem[address]
+            self._pc = address
 
     def inp(self):
         self._acc = self._in.read_value()
